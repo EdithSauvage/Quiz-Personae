@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Formulaire de Correspondance des Personae</title>
+</head>
+<body>
+    <form id="formulaire">
+        <label>Secteur d'activité :</label><br>
+        <input type="radio" name="secteur" value="Technologie">Technologie<br>
+        <input type="radio" name="secteur" value="Santé">Santé<br>
+        <input type="radio" name="secteur" value="Finance">Finance<br>
+        <input type="radio" name="secteur" value="Éducation">Éducation<br>
+        <input type="radio" name="secteur" value="Industrie">Industrie<br><br>
+
+        <label>Localisation de l'offre d'emploi :</label><br>
+        <input type="radio" name="localisation" value="Paris">Paris<br>
+        <input type="radio" name="localisation" value="Lyon">Lyon<br>
+        <input type="radio" name="localisation" value="Toulouse">Toulouse<br>
+        <input type="radio" name="localisation" value="Lille">Lille<br>
+        <input type="radio" name="localisation" value="Grenoble">Grenoble<br>
+        <input type="radio" name="localisation" value="Bordeaux">Bordeaux<br>
+        <input type="radio" name="localisation" value="Marseille">Marseille<br>
+        <input type="radio" name="localisation" value="Nantes">Nantes<br>
+        <input type="radio" name="localisation" value="Strasbourg">Strasbourg<br><br>
+
+        <label>Type de contrat proposé :</label><br>
+        <input type="radio" name="contrat" value="CDI">CDI<br>
+        <input type="radio" name="contrat" value="CDD">CDD<br>
+        <input type="radio" name="contrat" value="Freelance">Freelance<br>
+        <input type="radio" name="contrat" value="Stage">Stage<br><br>
+
+        <label>Génération ciblée :</label><br>
+        <input type="radio" name="generation" value="Baby Boomers">Baby Boomers (1946-1964)<br>
+        <input type="radio" name="generation" value="Generation X">Génération X (1965-1980)<br>
+        <input type="radio" name="generation" value="Milleniaux">Milléniaux/Génération Y (1981-1996)<br>
+        <input type="radio" name="generation" value="Generation Z">Génération Z (1997-2012)<br><br>
+
+        <button type="button" onclick="trouverPersonae()">Trouver le persona correspondant</button>
+    </form>
+
+    <div id="resultat"></div>
+
+    <script>
+        const personae = {
+            "Jean-Michel": {secteur: "Technologie", localisation: "Paris", contrat: "Freelance", generation: "Baby Boomers"},
+            "Nathalie": {secteur: "Technologie", localisation: "Lyon", contrat: "CDI", generation: "Generation X"},
+            "Samuel": {secteur: "Santé", localisation: "Toulouse", contrat: "CDI", generation: "Milleniaux"},
+            "Emma": {secteur: "Santé", localisation: "Lille", contrat: "CDI", generation: "Generation X"},
+            "Lucas": {secteur: "Finance", localisation: "Paris", contrat: "CDI", generation: "Milleniaux"},
+            "Chloé": {secteur: "Finance", localisation: "Bordeaux", contrat: "Freelance", generation: "Generation Z"},
+            "Marcel": {secteur: "Éducation", localisation: "Marseille", contrat: "CDD", generation: "Baby Boomers"},
+            "Léa": {secteur: "Industrie", localisation: "Lyon", contrat: "CDI", generation: "Generation X"},
+            "Clara": {secteur: "Industrie", localisation: "Grenoble", contrat: "Stage", generation: "Generation Z"}
+        };
+
+        function comparerReponses(reponses, persona) {
+            let score = 0;
+            if (reponses.secteur === persona.secteur) score += 1;
+            if (reponses.localisation === persona.localisation) score += 1;
+            if (reponses.contrat === persona.contrat) score += 1;
+            if (reponses.generation === persona.generation) score += 1;
+            return score;
+        }
+
+        function trouverPersonae() {
+            const reponses = {
+                secteur: document.querySelector('input[name="secteur"]:checked').value,
+                localisation: document.querySelector('input[name="localisation"]:checked').value,
+                contrat: document.querySelector('input[name="contrat"]:checked').value,
+                generation: document.querySelector('input[name="generation"]:checked').value
+            };
+
+            const scores = {};
+            for (const persona in personae) {
+                scores[persona] = comparerReponses(reponses, personae[persona]);
+            }
+
+            const personaeTriees = Object.keys(scores).sort((a, b) => scores[b] - scores[a]);
+
+            const resultat = document.getElementById('resultat');
+            resultat.innerHTML = `Les personae les plus pertinents sont : ${personaeTriees.slice(0, 2).join(", ")}`;
+        }
+    </script>
+</body>
+</html>
